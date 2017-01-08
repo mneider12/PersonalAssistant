@@ -108,6 +108,7 @@
   <ItemGroup>
     <Content Include="Configuration.aspx" />
     <Content Include="Dashboard.aspx" />
+    <Content Include="styles\Default.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -129,7 +130,7 @@
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Folder Include="data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

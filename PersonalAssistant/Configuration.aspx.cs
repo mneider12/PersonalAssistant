@@ -20,9 +20,11 @@ namespace PersonalAssistant
             settingsFilePath = Server.MapPath(settingsFileName);
             if (File.Exists(settingsFilePath))
             {
-                Stream settingsFileStream = File.OpenRead(settingsFilePath);
-                BinaryFormatter deserializer = new BinaryFormatter();
-                Settings = (Dictionary<string, string>)deserializer.Deserialize(settingsFileStream);
+                using (Stream settingsFileStream = File.OpenRead(settingsFilePath))
+                {
+                    BinaryFormatter deserializer = new BinaryFormatter();
+                    Settings = (Dictionary<string, string>)deserializer.Deserialize(settingsFileStream);
+                }
             }
             else
             {
@@ -34,7 +36,18 @@ namespace PersonalAssistant
 
         public void btnSave_Click(object sender, EventArgs e)
         {
+            string name = txtName.ToString();
+            if (name.Length > 0 && name.Length < 70)
+            {
+                Settings["Name"] = name;
+            }
+            int id 
 
+            using (Stream settingsFileStream = new FileStream(settingsFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                BinaryFormatter serializer = new BinaryFormatter();
+                serializer.Serialize(settingsFileStream, Settings);
+            }
         }
     }
 }
