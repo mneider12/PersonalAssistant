@@ -1,3 +1,4 @@
 Decisions - 
 
 names are limited to 35 characters for each given name, 70 total.
+ids are limited to 8 digits
