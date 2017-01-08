@@ -17,7 +17,7 @@
             <input type="text" runat="server" id="txtName"/>
         </div>
         <div>
-            <button type="submit" runat="server" id="btnSave">Save</button>
+            <asp:button id="btnSave" text="Save" runat="server" OnClick="btnSave_Click" />
         </div>
     </form>
 </body>

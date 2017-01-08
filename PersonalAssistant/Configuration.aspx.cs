@@ -11,71 +11,83 @@ namespace PersonalAssistant
 {
     public partial class Configuration : System.Web.UI.Page
     {
-        private const string settingsFileName = "~/Data/settings.ser";
-        private const int numFileRetries = 3;
-        private const int fileRetryDelay = 1000;
-        private string settingsFilePath;
+        private const string settingsFileName = "~/Data/settings.ser";  // loaction of the file storing the serialized dictionary of settings. Will be created if it doesn't exist.
+        private const int numFileRetries = 3;   // how many times to retry file access operations before giving up
+        private const int fileRetryDelay = 1000;    // how long, in milliseconds to wait between retries for file access operations
+        private string settingsFilePath;    // file name mapped to a location of the server
+        /// <summary>
+        /// Settings
+        /// name : current user name
+        /// name_maxLength : maximum allowed length for names
+        /// id : current user id
+        /// id_maxValue : maximum user id value
+        /// </summary>
         private Dictionary<string, string> Settings { get; set; }
 
+        /// <summary>
+        /// Runs when the page loads
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            loadSettings();
-            populateSettingsForm();
-
-            btnSave.ServerClick += new EventHandler(btnSave_Click);
+            settingsFilePath = Server.MapPath(settingsFileName);    // Set the global value for the settings file path
+            Dictionary<string, string> tempSettings;    // Use a temporary dictionary for the call to loadDictionary, since we can't pass a property
+            bool successfulLoad = DictionaryIOHelper.loadDictionary(settingsFilePath, out tempSettings);    // load the dictionary
+            if (successfulLoad) // If the load was successful, save the settings and populate the form if appropriate.
+            {
+                Settings = tempSettings;    // save the loaded dictionary to global property
+            }
+            loadDefaultSettings();
+            if (!IsPostBack)    // don't repopulate values if its a post back
+            {
+                populateSettingsForm();     // fill in fields with current settings
+            }
         }
 
+        /// <summary>
+        /// Save settings including user entered updates
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void btnSave_Click(object sender, EventArgs e)
         {
-            string name = txtName.Value;
-            if (name.Length > 0 && name.Length < 70)
+            string name = txtName.Value;    // grab the value from the name field on the page
+            if (name.Length > 0 && name.Length < Int32.Parse(Settings["name_maxLength"]))   // validate the user_name field
             {
                 Settings["name"] = name;
             }
             int id;
-            if (Int32.TryParse(numId.Value, out id) && id < 100000000)
+            if (Int32.TryParse(numId.Value, out id) && id <= Int32.Parse(Settings["id_maxValue"]))  // validate the id
             {
                 Settings["id"] = numId.Value;
             }
 
-            using (Stream settingsFileStream = new FileStream(settingsFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                BinaryFormatter serializer = new BinaryFormatter();
-                serializer.Serialize(settingsFileStream, Settings);
-            }
+            DictionaryIOHelper.saveDictionary(settingsFilePath, Settings);  // save all the settings
         }
 
-        private void loadSettings()
-        {
-            settingsFilePath = Server.MapPath(settingsFileName);
-            if (File.Exists(settingsFilePath))
-            {
-                for (int fileAccessIteration = 1; fileAccessIteration <= numFileRetries; fileAccessIteration++)
-                {
-                    try
-                    {
-                        using (Stream settingsFileStream = File.OpenRead(settingsFilePath))
-                        {
-                            BinaryFormatter deserializer = new BinaryFormatter();
-                            Settings = (Dictionary<string, string>)deserializer.Deserialize(settingsFileStream);
-                        }
-                        break;  // load successful
-                    }
-                    catch (IOException)
-                    {
-                        continue;
-                    }
-                }
-            }
-            else
-            {
-                Settings = new Dictionary<string, string>();
-            }
-        }
+        /// <summary>
+        /// Populate settings page with existing values
+        /// </summary>
         public void populateSettingsForm()
         {
             txtName.Value = Settings["name"];
             numId.Value = Settings["id"];
+        }
+
+        /// <summary>
+        /// Load default settings. Only sets a default setting, if nothing else is already set.
+        /// </summary>
+        public void loadDefaultSettings()
+        {
+            if (!Settings.ContainsKey("name_maxLength"))
+            {
+                Settings["name_maxLength"] = "70";  // random article said british gov't recommends 35 per name, or 70 total
+            }
+            if (!Settings.ContainsKey("id_maxValue"))
+            {
+                Settings["id_maxValue"] = "99999999";   // 8 digit ids
+            }
         }
     }
 }
