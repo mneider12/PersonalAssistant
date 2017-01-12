@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
         <div>
             <label for="spnVisaPrice" >Visa:</label>
-            <span id="spnVisaPrice">90.00</span>
+            <span id="spnVisaPrice" runat="server"></span>
         </div>
     </form>
 </body>

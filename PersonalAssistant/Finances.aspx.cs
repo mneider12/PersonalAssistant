@@ -7,28 +7,29 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using HtmlAgilityPack;
+
+
 namespace PersonalAssistant
 {
     public partial class Finances : System.Web.UI.Page
     {
+        private const string yahooFinanceQuoteUrlBase = "http://finance.yahoo.com/quote/";
         protected void Page_Load(object sender, EventArgs e)
         {
-            WebRequest visaQuoteRequest = WebRequest.Create("http://finance.yahoo.com/quote/v");
-            using (WebResponse visaQuoteResponse = visaQuoteRequest.GetResponse())
+            double price;
+            if (getLastCloseFromYahoo("V", out price))
             {
-                using (Stream visaQuoteStream = visaQuoteResponse.GetResponseStream())
-                {
-                    using (StreamReader visaQuoteStreamReader = new StreamReader(visaQuoteStream))
-                    {
-                        string quoteLine;
-                        while ((quoteLine = visaQuoteStreamReader.ReadLine()) != null)
-                        {
-                            Console.WriteLine(quoteLine);
-                        }
-                    }
-                }
+                spnVisaPrice.InnerText = price.ToString();
             }
-
+        }
+        public bool getLastCloseFromYahoo(string ticker, out double price)
+        {
+            string yahooFinanceQuoteUrl = yahooFinanceQuoteUrlBase + ticker;
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument document = web.Load(yahooFinanceQuoteUrl);
+            HtmlNode quoteNode = document.DocumentNode.SelectSingleNode("//tr/td[contains(., 'Previous Close')]/following-sibling::td");
+            return Double.TryParse(quoteNode.InnerText, out price);
         }
     }
 }
