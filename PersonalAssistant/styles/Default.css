@@ -1,3 +1,9 @@
 ﻿button {
     width: 100px;
 }
+.hidden {
+    display: none;
+}
+.show {
+    display: normal;
+}

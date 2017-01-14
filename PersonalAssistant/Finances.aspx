@@ -12,7 +12,11 @@
             <h1>Watch List</h1>
             <!--Add contents of watch list here-->
             <div>
-
+                <table id="tblWatchList" runat="server">
+                    <tr>
+                        <th>Ticker</th>
+                    </tr>
+                </table>
             </div>
             <input type="text" id="txtAddToWatchList" runat="server" />
             <asp:Button ID="btnAddToWatchList" runat="server" OnClick="btnAddToWatchList_Click" Text="Add" />

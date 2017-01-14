@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using HtmlAgilityPack;
-
+using System.Web.UI.HtmlControls;
 
 namespace PersonalAssistant
 {
@@ -22,7 +22,7 @@ namespace PersonalAssistant
         protected void Page_Load(object sender, EventArgs e)
         {
             watchListFilePath = Server.MapPath(watchListFileName);
-            watchListLoaded = loadWatchList();
+            loadWatchList();
         }
         public bool getLastCloseFromYahoo(string ticker, out double price)
         {
@@ -35,12 +35,36 @@ namespace PersonalAssistant
 
         protected void btnAddToWatchList_Click(object sender, EventArgs e)
         {
-
+            string ticker = txtAddToWatchList.Value;
+            watchList.Add(ticker);
+            IOHelper.saveSerializable<List<string>>(watchListFilePath, watchList, watchListLoaded);
         }
 
-        private bool loadWatchList()
+        private void loadWatchList()
         {
-            return false;
+            if (IOHelper.loadSerializable<List<string>>(watchListFilePath, out watchList))
+            {
+                renderWatchList();
+                watchListLoaded = true;
+            }
+            else
+            {
+                watchList = new List<string>();
+                watchListLoaded = false;
+            }
+        }
+
+        private void renderWatchList()
+        {
+            foreach (string ticker in watchList)
+            {
+                tblWatchList.Attributes["class"] = "show";
+                HtmlTableRow watchListRow = new HtmlTableRow();
+                HtmlTableCell tickerCell = new HtmlTableCell();
+                tickerCell.InnerText = ticker;
+                watchListRow.Cells.Add(tickerCell);
+                tblWatchList.Rows.Add(watchListRow);
+            }
         }
     }
 }
