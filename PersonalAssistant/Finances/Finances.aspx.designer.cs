@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PersonalAssistant {
+namespace PersonalAssistant.Finances {
     
     
     public partial class Finances {
@@ -47,5 +47,14 @@ namespace PersonalAssistant {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddToWatchList;
+        
+        /// <summary>
+        /// txtOrderTicker control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderTicker;
     }
 }

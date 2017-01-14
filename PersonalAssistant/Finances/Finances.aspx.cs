@@ -9,8 +9,9 @@ using System.Web.UI.WebControls;
 
 using HtmlAgilityPack;
 using System.Web.UI.HtmlControls;
+using System.Threading;
 
-namespace PersonalAssistant
+namespace PersonalAssistant.Finances
 {
     /// <summary>
     /// Finance page support
@@ -41,15 +42,32 @@ namespace PersonalAssistant
         {
             string yahooFinanceQuoteUrl = yahooFinanceQuoteUrlBase + ticker;    // build url for ticker request
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument document = web.Load(yahooFinanceQuoteUrl); // load the yahoo finance page for the given ticker
-            // get the next td cell after the 'Previous Close' label td cell
-            HtmlNode quoteNode = document.DocumentNode.SelectSingleNode("//tr/td[contains(., 'Previous Close')]/following-sibling::td");
+            HtmlNode quoteNode = tryGetPreviousClose(web, yahooFinanceQuoteUrl);
             if (quoteNode == null)  // couldn't find the quote
             {
                 price = default(double);
                 return false;
             }
             return Double.TryParse(quoteNode.InnerText, out price); // return true if we find a valid price
+        }
+
+        public HtmlNode tryGetPreviousClose(HtmlWeb web, string yahooFinanceQuoteUrl, int timesToRetry = 3, int delayBetweenRetries = 1000)
+        {
+            for (int retryNum = 1; retryNum <= timesToRetry; retryNum++)
+            {
+                try
+                {
+                    HtmlDocument document = web.Load(yahooFinanceQuoteUrl); // load the yahoo finance page for the given ticker
+                                                                            // get the next td cell after the 'Previous Close' label td cell
+                    return document.DocumentNode.SelectSingleNode("//tr/td[contains(., 'Previous Close')]/following-sibling::td");
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(delayBetweenRetries);  // wait a bit to retry
+                    continue; //try again
+                }
+            }
+            return null;    // retries failed
         }
 
         /// <summary>
