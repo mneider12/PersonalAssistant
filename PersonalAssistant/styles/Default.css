@@ -7,3 +7,6 @@
 .show {
     display: normal;
 }
+.ticker {
+    text-transform: uppercase;
+}

@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Finances</title>
+    <link rel="stylesheet" href="styles/Default.css" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -18,7 +19,7 @@
                     </tr>
                 </table>
             </div>
-            <input type="text" id="txtAddToWatchList" runat="server" />
+            <input type="text" id="txtAddToWatchList" runat="server" class="ticker" />
             <asp:Button ID="btnAddToWatchList" runat="server" OnClick="btnAddToWatchList_Click" Text="Add" />
         </div>
     </form>

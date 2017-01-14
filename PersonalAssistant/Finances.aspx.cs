@@ -14,7 +14,7 @@ namespace PersonalAssistant
 {
     public partial class Finances : System.Web.UI.Page
     {
-        private List<string> watchList;
+        private HashSet<string> watchList;
         private bool watchListLoaded;
         private const string watchListFileName = "~/data/watchlist.ser";
         private string watchListFilePath;
@@ -30,26 +30,32 @@ namespace PersonalAssistant
             HtmlWeb web = new HtmlWeb();
             HtmlDocument document = web.Load(yahooFinanceQuoteUrl);
             HtmlNode quoteNode = document.DocumentNode.SelectSingleNode("//tr/td[contains(., 'Previous Close')]/following-sibling::td");
+            if (quoteNode == null)
+            {
+                price = default(double);
+                return false;
+            }
             return Double.TryParse(quoteNode.InnerText, out price);
         }
 
         protected void btnAddToWatchList_Click(object sender, EventArgs e)
         {
-            string ticker = txtAddToWatchList.Value;
+            string ticker = txtAddToWatchList.Value.ToUpper();
             watchList.Add(ticker);
-            IOHelper.saveSerializable<List<string>>(watchListFilePath, watchList, watchListLoaded);
+            IOHelper.saveSerializable<HashSet<string>>(watchListFilePath, watchList, watchListLoaded);
+            addToWatchListTable(ticker);
         }
 
         private void loadWatchList()
         {
-            if (IOHelper.loadSerializable<List<string>>(watchListFilePath, out watchList))
+            if (IOHelper.loadSerializable<HashSet<string>>(watchListFilePath, out watchList))
             {
                 renderWatchList();
                 watchListLoaded = true;
             }
             else
             {
-                watchList = new List<string>();
+                watchList = new HashSet<string>();
                 watchListLoaded = false;
             }
         }
@@ -59,12 +65,31 @@ namespace PersonalAssistant
             foreach (string ticker in watchList)
             {
                 tblWatchList.Attributes["class"] = "show";
-                HtmlTableRow watchListRow = new HtmlTableRow();
-                HtmlTableCell tickerCell = new HtmlTableCell();
-                tickerCell.InnerText = ticker;
-                watchListRow.Cells.Add(tickerCell);
-                tblWatchList.Rows.Add(watchListRow);
+                addToWatchListTable(ticker);
             }
+        }
+
+        private void addToWatchListTable(string ticker)
+        {
+            const string failedToLoadQuote = "<ERR>";
+            HtmlTableRow watchListRow = new HtmlTableRow();
+            // Ticker cell
+            HtmlTableCell tickerCell = new HtmlTableCell();
+            tickerCell.InnerText = ticker;
+            watchListRow.Cells.Add(tickerCell);
+            // Last Close cell
+            HtmlTableCell quoteCell = new HtmlTableCell();
+            double quote;
+            if (getLastCloseFromYahoo(ticker, out quote))
+            {
+                quoteCell.InnerText = quote.ToString();
+            }
+            else
+            {
+                quoteCell.InnerText = failedToLoadQuote;
+            }
+            watchListRow.Cells.Add(quoteCell);
+            tblWatchList.Rows.Add(watchListRow);
         }
     }
 }
