@@ -22,7 +22,7 @@ namespace PersonalAssistant
         /// id : current user id
         /// id_maxValue : maximum user id value
         /// </summary>
-        private Dictionary<string, string> Settings { get; set; }
+        private Dictionary<string, string> settings;
 
         /// <summary>
         /// Runs when the page loads
@@ -32,12 +32,7 @@ namespace PersonalAssistant
         protected void Page_Load(object sender, EventArgs e)
         {
             settingsFilePath = Server.MapPath(settingsFileName);    // Set the global value for the settings file path
-            Dictionary<string, string> tempSettings;    // Use a temporary dictionary for the call to loadDictionary, since we can't pass a property
-            bool successfulLoad = DictionaryIOHelper.loadDictionary(settingsFilePath, out tempSettings);    // load the dictionary
-            if (successfulLoad) // If the load was successful, save the settings and populate the form if appropriate.
-            {
-                Settings = tempSettings;    // save the loaded dictionary to global property
-            }
+            IOHelper.loadSerializable<Dictionary<string, string>>(settingsFilePath, out settings);    // load the dictionary
             loadDefaultSettings();
             if (!IsPostBack)    // don't repopulate values if its a post back
             {
@@ -53,17 +48,17 @@ namespace PersonalAssistant
         public void btnSave_Click(object sender, EventArgs e)
         {
             string name = txtName.Value;    // grab the value from the name field on the page
-            if (name.Length > 0 && name.Length < Int32.Parse(Settings["name_maxLength"]))   // validate the user_name field
+            if (name.Length > 0 && name.Length < Int32.Parse(settings["name_maxLength"]))   // validate the user_name field
             {
-                Settings["name"] = name;
+                settings["name"] = name;
             }
             int id;
-            if (Int32.TryParse(numId.Value, out id) && id <= Int32.Parse(Settings["id_maxValue"]))  // validate the id
+            if (Int32.TryParse(numId.Value, out id) && id <= Int32.Parse(settings["id_maxValue"]))  // validate the id
             {
-                Settings["id"] = numId.Value;
+                settings["id"] = numId.Value;
             }
 
-            DictionaryIOHelper.saveDictionary(settingsFilePath, Settings);  // save all the settings
+            IOHelper.saveSerializable<Dictionary<string, string>>(settingsFilePath, settings);  // save all the settings
         }
 
         /// <summary>
@@ -71,8 +66,8 @@ namespace PersonalAssistant
         /// </summary>
         public void populateSettingsForm()
         {
-            txtName.Value = Settings["name"];
-            numId.Value = Settings["id"];
+            txtName.Value = settings["name"];
+            numId.Value = settings["id"];
         }
 
         /// <summary>
@@ -80,13 +75,13 @@ namespace PersonalAssistant
         /// </summary>
         public void loadDefaultSettings()
         {
-            if (!Settings.ContainsKey("name_maxLength"))
+            if (!settings.ContainsKey("name_maxLength"))
             {
-                Settings["name_maxLength"] = "70";  // random article said british gov't recommends 35 per name, or 70 total
+                settings["name_maxLength"] = "70";  // random article said british gov't recommends 35 per name, or 70 total
             }
-            if (!Settings.ContainsKey("id_maxValue"))
+            if (!settings.ContainsKey("id_maxValue"))
             {
-                Settings["id_maxValue"] = "99999999";   // 8 digit ids
+                settings["id_maxValue"] = "99999999";   // 8 digit ids
             }
         }
     }

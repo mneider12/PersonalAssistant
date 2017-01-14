@@ -22,12 +22,21 @@ namespace PersonalAssistant {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// spnVisaPrice control.
+        /// txtAddToWatchList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spnVisaPrice;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtAddToWatchList;
+        
+        /// <summary>
+        /// btnAddToWatchList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddToWatchList;
     }
 }

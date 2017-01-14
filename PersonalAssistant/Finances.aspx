@@ -9,8 +9,13 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <label for="spnVisaPrice" >Visa:</label>
-            <span id="spnVisaPrice" runat="server"></span>
+            <h1>Watch List</h1>
+            <!--Add contents of watch list here-->
+            <div>
+
+            </div>
+            <input type="text" id="txtAddToWatchList" runat="server" />
+            <asp:Button ID="btnAddToWatchList" runat="server" OnClick="btnAddToWatchList_Click" Text="Add" />
         </div>
     </form>
 </body>

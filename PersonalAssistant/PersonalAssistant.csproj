@@ -131,7 +131,6 @@
     <Compile Include="Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DictionaryIOHelper.cs" />
     <Compile Include="Finances.aspx.cs">
       <DependentUpon>Finances.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -139,6 +138,7 @@
     <Compile Include="Finances.aspx.designer.cs">
       <DependentUpon>Finances.aspx</DependentUpon>
     </Compile>
+    <Compile Include="IOHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

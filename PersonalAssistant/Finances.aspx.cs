@@ -14,14 +14,15 @@ namespace PersonalAssistant
 {
     public partial class Finances : System.Web.UI.Page
     {
+        private List<string> watchList;
+        private bool watchListLoaded;
+        private const string watchListFileName = "~/data/watchlist.ser";
+        private string watchListFilePath;
         private const string yahooFinanceQuoteUrlBase = "http://finance.yahoo.com/quote/";
         protected void Page_Load(object sender, EventArgs e)
         {
-            double price;
-            if (getLastCloseFromYahoo("V", out price))
-            {
-                spnVisaPrice.InnerText = price.ToString();
-            }
+            watchListFilePath = Server.MapPath(watchListFileName);
+            watchListLoaded = loadWatchList();
         }
         public bool getLastCloseFromYahoo(string ticker, out double price)
         {
@@ -30,6 +31,16 @@ namespace PersonalAssistant
             HtmlDocument document = web.Load(yahooFinanceQuoteUrl);
             HtmlNode quoteNode = document.DocumentNode.SelectSingleNode("//tr/td[contains(., 'Previous Close')]/following-sibling::td");
             return Double.TryParse(quoteNode.InnerText, out price);
+        }
+
+        protected void btnAddToWatchList_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private bool loadWatchList()
+        {
+            return false;
         }
     }
 }
