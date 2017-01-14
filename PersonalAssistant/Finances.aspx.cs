@@ -12,32 +12,51 @@ using System.Web.UI.HtmlControls;
 
 namespace PersonalAssistant
 {
+    /// <summary>
+    /// Finance page support
+    /// </summary>
     public partial class Finances : System.Web.UI.Page
     {
-        private HashSet<string> watchList;
-        private bool watchListLoaded;
-        private const string watchListFileName = "~/data/watchlist.ser";
-        private string watchListFilePath;
-        private const string yahooFinanceQuoteUrlBase = "http://finance.yahoo.com/quote/";
+        private HashSet<string> watchList;  // local copy of the watch list
+        private bool watchListLoaded;   // if we successfully loaded the watch list from disk. If we did, we can overwrite the existing file later.
+        private const string watchListFileName = "~/data/watchlist.ser";    // relative location of the watchlist on disk
+        private string watchListFilePath;   // mapped file path on the server
+        private const string yahooFinanceQuoteUrlBase = "http://finance.yahoo.com/quote/";  // url for quotes from yahoo
+        /// <summary>
+        /// Load data when the page loads. Maps the relative watchlist path on the server and loads the watchlist onto the page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
-            watchListFilePath = Server.MapPath(watchListFileName);
-            loadWatchList();
+            watchListFilePath = Server.MapPath(watchListFileName);  // map the relative file location on the server.
+            loadWatchList();    // load watchList locally and render to the page
         }
+        /// <summary>
+        /// Scrape the html from yahoo for a stock quote
+        /// </summary>
+        /// <param name="ticker">stock ticker to lookeup</param>
+        /// <returns></returns>
         public bool getLastCloseFromYahoo(string ticker, out double price)
         {
-            string yahooFinanceQuoteUrl = yahooFinanceQuoteUrlBase + ticker;
+            string yahooFinanceQuoteUrl = yahooFinanceQuoteUrlBase + ticker;    // build url for ticker request
             HtmlWeb web = new HtmlWeb();
-            HtmlDocument document = web.Load(yahooFinanceQuoteUrl);
+            HtmlDocument document = web.Load(yahooFinanceQuoteUrl); // load the yahoo finance page for the given ticker
+            // get the next td cell after the 'Previous Close' label td cell
             HtmlNode quoteNode = document.DocumentNode.SelectSingleNode("//tr/td[contains(., 'Previous Close')]/following-sibling::td");
-            if (quoteNode == null)
+            if (quoteNode == null)  // couldn't find the quote
             {
                 price = default(double);
                 return false;
             }
-            return Double.TryParse(quoteNode.InnerText, out price);
+            return Double.TryParse(quoteNode.InnerText, out price); // return true if we find a valid price
         }
 
+        /// <summary>
+        /// Add an ticker to the watchlist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void btnAddToWatchList_Click(object sender, EventArgs e)
         {
             string ticker = txtAddToWatchList.Value.ToUpper();
