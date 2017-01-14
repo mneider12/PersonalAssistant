@@ -29,7 +29,14 @@
             <div id="divOrderFormContainer" class="modal" >
                 <div id="divOrderFormContent" class="modal-content" >
                     <span id="spnCloseOrderForm" class="close">&times;</span>
+                    <label for="dateOrderDate">Date: </label>
+                    <input type="date" id="dateOrderDate" runat="server" />
+                    <label for="txtOrderTicker">Ticker: </label>
                     <input type="text" id="txtOrderTicker" runat="server" />
+                    <label for="numOrderShares">Shares: </label>
+                    <input type="number" id="numOrderShares" runat="server" />
+                    <label for="numOrderPrice">Order Price: </label>
+                    <input type="number" id="numOrderPrice" runat="server" />
                 </div>
             </div>
     </form>

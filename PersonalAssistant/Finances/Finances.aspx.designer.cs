@@ -49,6 +49,15 @@ namespace PersonalAssistant.Finances {
         protected global::System.Web.UI.WebControls.Button btnAddToWatchList;
         
         /// <summary>
+        /// dateOrderDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl dateOrderDate;
+        
+        /// <summary>
         /// txtOrderTicker control.
         /// </summary>
         /// <remarks>
@@ -56,5 +65,23 @@ namespace PersonalAssistant.Finances {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderTicker;
+        
+        /// <summary>
+        /// txtOrderShares control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderShares;
+        
+        /// <summary>
+        /// txtOrderPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderPrice;
     }
 }
