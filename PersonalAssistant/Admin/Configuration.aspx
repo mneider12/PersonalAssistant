@@ -19,6 +19,7 @@
         <div>
             <asp:button id="btnSave" text="Save" runat="server" OnClick="btnSave_Click" />
         </div>
+        <asp:Button ID="btnReinsall" runat="server" Text="ReInstall Application" OnClick="btnReinsall_Click"/>
     </form>
 </body>
 </html>

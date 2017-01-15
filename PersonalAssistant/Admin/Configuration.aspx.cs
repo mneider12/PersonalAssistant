@@ -84,5 +84,10 @@ namespace PersonalAssistant
                 settings["id_maxValue"] = "99999999";   // 8 digit ids
             }
         }
+
+        public void btnReinstall_Click(object sender, EventArgs e)
+        {
+            SQLiteConnection
+        }
     }
 }

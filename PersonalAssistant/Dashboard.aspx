@@ -9,7 +9,7 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        <asp:Hyperlink runat="server" Text="Settings" NavigateUrl="~/Configuration.aspx" />
+        <asp:Hyperlink runat="server" Text="Settings" NavigateUrl="~/Admin/Configuration.aspx" />
         <asp:HyperLink runat="server" Text="Finances" NavigateUrl="~/Finances/Finances.aspx" />
     </div>
     </form>
