@@ -128,5 +128,10 @@ namespace PersonalAssistant.Finances
             watchListRow.Cells.Add(quoteCell);
             tblWatchList.Rows.Add(watchListRow);
         }
+
+        protected void btnSubmitOrder_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

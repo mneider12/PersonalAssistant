@@ -24,19 +24,24 @@
                 <asp:Button ID="btnAddToWatchList" runat="server" OnClick="btnAddToWatchList_Click" Text="Add" />
             </div>
             <div id="divOrder">
-                <button id="btnAddOrder"  />
+                <button id="btnAddOrder" type="button">Add Order</button>
             </div>
             <div id="divOrderFormContainer" class="modal" >
                 <div id="divOrderFormContent" class="modal-content" >
                     <span id="spnCloseOrderForm" class="close">&times;</span>
                     <label for="dateOrderDate">Date: </label>
                     <input type="date" id="dateOrderDate" runat="server" />
+                    <br />
                     <label for="txtOrderTicker">Ticker: </label>
                     <input type="text" id="txtOrderTicker" runat="server" />
+                    <br />
                     <label for="numOrderShares">Shares: </label>
                     <input type="number" id="numOrderShares" runat="server" />
+                    <br />
                     <label for="numOrderPrice">Order Price: </label>
                     <input type="number" id="numOrderPrice" runat="server" />
+                    <br />
+                    <asp:Button ID="btnSubmitOrder" runat="server" OnClick="btnSubmitOrder_Click" Text="Submit" />
                 </div>
             </div>
     </form>

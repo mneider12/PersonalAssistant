@@ -9,7 +9,7 @@
     }
 
     closeSpan.onclick = function () {
-        modalContainer.stle.display = "none";
+        modalContainer.style.display = "none";
     }
 
     window.onclick = function (event) {

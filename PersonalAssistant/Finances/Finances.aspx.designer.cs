@@ -67,21 +67,30 @@ namespace PersonalAssistant.Finances {
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderTicker;
         
         /// <summary>
-        /// txtOrderShares control.
+        /// numOrderShares control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderShares;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl numOrderShares;
         
         /// <summary>
-        /// txtOrderPrice control.
+        /// numOrderPrice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtOrderPrice;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl numOrderPrice;
+        
+        /// <summary>
+        /// btnSubmitOrder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSubmitOrder;
     }
 }
