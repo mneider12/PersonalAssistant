@@ -140,12 +140,44 @@ namespace PersonalAssistant.Finances
             double shares;
             double price;
 
-            DateTime.TryParse(dateOrderDate.Value, out date);
-            ticker = txtOrderTicker.Value;
+            validateDate(dateOrderDate.Value, out date);
+            validateTicker(txtOrderTicker.Value, out ticker);
             Double.TryParse(numOrderShares.Value, out shares);
             Double.TryParse(numOrderPrice.Value, out price);
             Order newOrder = new Order(date, ticker, shares, price);
             newOrder.save();
+        }
+
+        private bool validateDate(string dateInput, out DateTime validatedDate)
+        {
+            if (!DateTime.TryParse(dateInput, out validatedDate))    // couldn't parse date
+            {
+                return false;
+            }
+            if (validatedDate > DateTime.Today)         // don't allow future dates
+            {
+                return false;
+            }
+            return true;    // validation passed, validated date in out parameter
+        }
+
+        private bool validateTicker(string tickerInput, out string validatedTicker)
+        {
+            if (tickerInput == null)    // can't be null
+            {
+                validatedTicker = null;
+                return false;
+            }
+            validatedTicker = tickerInput.ToUpper();    // must be all uppercase. Won't fail for this.
+            if (!validatedTicker.All(Char.IsLetter))    // must only contain letters
+            {
+                return false;
+            }
+            if (validatedTicker.Length > 4)             // max length of a valid stock ticker is 4
+            {
+                return false;
+            }
+            return true;        // passed validation. validated ticker is in out parameter.
         }
 
     }

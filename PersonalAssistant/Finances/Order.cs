@@ -51,5 +51,7 @@ namespace PersonalAssistant.Finances
                 }
             }
         }
+
+        
     }
 }
