@@ -10,6 +10,8 @@ using System.Web.UI.WebControls;
 using HtmlAgilityPack;
 using System.Web.UI.HtmlControls;
 using System.Threading;
+using System.Data.SQLite;
+using static PersonalAssistant.IOHelper;
 
 namespace PersonalAssistant.Finances
 {
@@ -23,6 +25,7 @@ namespace PersonalAssistant.Finances
         private const string watchListFileName = "~/data/watchlist.ser";    // relative location of the watchlist on disk
         private string watchListFilePath;   // mapped file path on the server
         private const string yahooFinanceQuoteUrlBase = "http://finance.yahoo.com/quote/";  // url for quotes from yahoo
+        private Dictionary<string, string> settings;
         /// <summary>
         /// Load data when the page loads. Maps the relative watchlist path on the server and loads the watchlist onto the page.
         /// </summary>
@@ -32,6 +35,7 @@ namespace PersonalAssistant.Finances
         {
             watchListFilePath = Server.MapPath(watchListFileName);  // map the relative file location on the server.
             loadWatchList();    // load watchList locally and render to the page
+            //loadSettings();
         }
         /// <summary>
         /// Scrape the html from yahoo for a stock quote
@@ -85,7 +89,7 @@ namespace PersonalAssistant.Finances
 
         private void loadWatchList()
         {
-            if (IOHelper.loadSerializable<HashSet<string>>(watchListFilePath, out watchList))
+            if (IOHelper.loadSerializable<HashSet<string>>(watchListFilePath, out watchList) == FileLoadResult.FileLoaded)
             {
                 renderWatchList();
                 watchListLoaded = true;
@@ -131,7 +135,18 @@ namespace PersonalAssistant.Finances
 
         protected void btnSubmitOrder_Click(object sender, EventArgs e)
         {
-            
+            DateTime date;
+            string ticker;
+            double shares;
+            double price;
+
+            DateTime.TryParse(dateOrderDate.Value, out date);
+            ticker = txtOrderTicker.Value;
+            Double.TryParse(numOrderShares.Value, out shares);
+            Double.TryParse(numOrderPrice.Value, out price);
+            Order newOrder = new Order(date, ticker, shares, price);
+            newOrder.save();
         }
+
     }
 }

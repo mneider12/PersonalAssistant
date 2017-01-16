@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -87,7 +88,27 @@ namespace PersonalAssistant
 
         public void btnReinstall_Click(object sender, EventArgs e)
         {
-            SQLiteConnection
+            SQLiteConnection.CreateFile(dbHelper.DbPath);   // create the database
+
+            using (SQLiteConnection dbConnection = dbHelper.getDbConnection())
+            {
+                dbConnection.Open();
+                createOrdersTable(dbConnection);
+            }
+        }
+
+        public void createOrdersTable(SQLiteConnection dbConnection)
+        {
+            string createOrdersTableString = "CREATE TABLE ORDERS (" +
+                                    "ID INT PRIMARY KEY NOT NULL, " +
+                                    "DATE REAL, " +
+                                    "TICKER TEXT NOT NULL, " +
+                                    "SHARES INT NOT NULL, " +
+                                    "PRICE REAL);";
+            using (SQLiteCommand createOrdersTable = new SQLiteCommand(createOrdersTableString, dbConnection))
+            {
+                createOrdersTable.ExecuteNonQuery();
+            }
         }
     }
 }

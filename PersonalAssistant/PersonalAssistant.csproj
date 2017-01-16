@@ -136,6 +136,8 @@
     <Compile Include="Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
+    <Compile Include="dbHelper.cs" />
+    <Compile Include="FileAccessException.cs" />
     <Compile Include="Finances\Finances.aspx.cs">
       <DependentUpon>Finances.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -144,6 +146,7 @@
       <DependentUpon>Finances.aspx</DependentUpon>
     </Compile>
     <Compile Include="Finances\Order.cs" />
+    <Compile Include="IdHelper.cs" />
     <Compile Include="IOHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />

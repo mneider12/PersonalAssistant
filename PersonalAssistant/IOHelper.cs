@@ -24,7 +24,7 @@ namespace PersonalAssistant
         /// <param name="fileRetryDelay">How long, in milliseconds, to wait between file read operation retries</param>
         /// <returns>True if the load was successful, otherwise false</returns>
         /// <exception cref="SerializationException">The file couldn't be deserialized. Probably a formatting issue</exception>
-        public static bool loadSerializable<T>(
+        public static FileLoadResult loadSerializable<T>(
             string filePath, out T serializable, int numFileRetries = defaultNumFileRetries, int fileRetryDelay = fileRetryDelay)
         {
             serializable = default(T);
@@ -39,7 +39,7 @@ namespace PersonalAssistant
                             BinaryFormatter deserializer = new BinaryFormatter();   // Must have the same format as the save operation
                             serializable = (T)deserializer.Deserialize(settingsFileStream);  // load the dictionary from file
                         }
-                        return true;    // no exceptions. File loaded successfully.
+                        return FileLoadResult.FileLoaded;    // no exceptions. File loaded successfully.
                     }
                     catch (IOException)
                     {
@@ -48,7 +48,11 @@ namespace PersonalAssistant
                     }
                 }
             }
-            return false;   // Retries exhausted. Couldn't load file.
+            else
+            {
+                return FileLoadResult.FileDoesNotExist;
+            }
+            return FileLoadResult.FileAccessFailed;   // Retries exhausted. Couldn't load file.
         }
 
         /// <summary>
@@ -85,6 +89,11 @@ namespace PersonalAssistant
                 }
             }
             return false;   // retries exhausted. Couldn't save dictionary.
+        }
+
+        public enum FileLoadResult
+        {
+            FileDoesNotExist, FileAccessFailed, FileLoaded
         }
     }
 }
